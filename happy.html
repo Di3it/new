@@ -1,0 +1,119 @@
+<!DOCTYPE html><html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Birthday Surprise</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: radial-gradient(circle at top, #ffe6f0, #ffb6c1);
+      overflow: hidden;
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+    }
+    .message {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: white;
+      padding: 20px 30px;
+      border-radius: 20px;
+      box-shadow: 0 0 15px rgba(255, 105, 180, 0.4);
+      opacity: 0;
+      transition: opacity 1s ease;
+      text-align: center;
+      font-size: 1.5rem;
+      z-index: 10;
+    }
+    .message.active {
+      opacity: 1;
+    }
+    .heart {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background: red;
+      transform: rotate(45deg);
+      animation: float 6s infinite;
+    }
+    .heart::before, .heart::after {
+      content: "";
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background: red;
+      border-radius: 50%;
+    }
+    .heart::before {
+      top: -10px;
+      left: 0;
+    }
+    .heart::after {
+      left: -10px;
+      top: 0;
+    }
+    @keyframes float {
+      0% {transform: translateY(0) rotate(45deg); opacity: 1;}
+      100% {transform: translateY(-100vh) rotate(45deg); opacity: 0;}
+    }
+    .confetti {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      background-color: hsl(0, 100%, 70%);
+      animation: fall 3s linear forwards;
+    }
+    @keyframes fall {
+      0% {transform: translateY(0) rotate(0);}
+      100% {transform: translateY(100vh) rotate(360deg); opacity: 0;}
+    }
+  </style>
+</head>
+<body>
+  <div class="message" id="msg1">Hey you...</div>
+  <div class="message" id="msg2">It’s your day today 🎉</div>
+  <div class="message" id="msg3">So here’s a little something I made...</div>
+  <div class="message" id="msg4">You're loved more than you know. Happy Birthday! ❤️</div>  <audio id="bgm" autoplay loop>
+    <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mp3">
+  </audio>  <script>
+    const messages = ["msg1", "msg2", "msg3", "msg4"];
+    let index = 0;
+
+    function showMessage() {
+      if (index > 0) document.getElementById(messages[index - 1]).classList.remove('active');
+      if (index < messages.length) {
+        document.getElementById(messages[index]).classList.add('active');
+        index++;
+        setTimeout(showMessage, 3000);
+      } else {
+        dropConfetti();
+      }
+    }
+
+    function spawnHearts() {
+      const heart = document.createElement('div');
+      heart.className = 'heart';
+      heart.style.left = Math.random() * 100 + 'vw';
+      heart.style.bottom = '-20px';
+      heart.style.animationDuration = (Math.random() * 3 + 3) + 's';
+      document.body.appendChild(heart);
+      setTimeout(() => heart.remove(), 6000);
+    }
+
+    function dropConfetti() {
+      for (let i = 0; i < 100; i++) {
+        const confetti = document.createElement('div');
+        confetti.className = 'confetti';
+        confetti.style.left = Math.random() * 100 + 'vw';
+        confetti.style.top = '-10px';
+        confetti.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 70%)`;
+        document.body.appendChild(confetti);
+        setTimeout(() => confetti.remove(), 3000);
+      }
+    }
+
+    setInterval(spawnHearts, 500);
+    window.onload = () => showMessage();
+  </script></body>
+</html>
